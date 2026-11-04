@@ -25,7 +25,7 @@
       line-height: 1.45;
       max-width: 520px;
       margin: 0 auto;
-      padding: 32px 24px 56px;
+      padding: 32px 24px calc(84px + env(safe-area-inset-bottom));
       color: var(--ink);
       background: var(--page);
     }
@@ -38,11 +38,31 @@
       padding: 0;
       list-style: none;
     }
-    .track {
+    .track-content {
+      box-sizing: border-box;
       padding: 17px 12px 19px;
       border-bottom: 1px solid var(--rule);
     }
-    .track.is-active { background: var(--active-row); }
+    .track.is-active .track-content { background: var(--active-row); }
+    .track.is-docked-top .track-content,
+    .track.is-docked-bottom .track-content {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      width: min(calc(100% - 48px), 520px);
+      max-height: 100dvh;
+      overflow-y: auto;
+      box-shadow: 0 2px 14px #34271f40;
+    }
+    .track.is-docked-top .track-content {
+      top: 0;
+      padding-top: calc(17px + env(safe-area-inset-top));
+    }
+    .track.is-docked-bottom .track-content {
+      bottom: 0;
+      padding-bottom: calc(19px + env(safe-area-inset-bottom));
+    }
     .track-title {
       margin: 0 0 7px;
       font-size: 1rem;
@@ -76,7 +96,9 @@
     }
     audio::-webkit-media-controls-panel { background-color: #e9ceb4; }
     @media (max-width: 480px) {
-      body { padding: 24px 16px 40px; }
+      body { padding: 24px 16px calc(84px + env(safe-area-inset-bottom)); }
+      .track.is-docked-top .track-content,
+      .track.is-docked-bottom .track-content { width: calc(100% - 32px); }
     }
   </style>
 </head>
@@ -617,6 +639,25 @@
     const list = document.getElementById('audio-list');
     const players = [];
     let activePlayer = null;
+    const resetDockedTrack = (player) => {
+      const item = player.closest('.track');
+      item.classList.remove('is-docked-top', 'is-docked-bottom');
+      item.style.height = '';
+    };
+    const updateDockedPlayer = () => {
+      if (!activePlayer) return;
+      const item = activePlayer.closest('.track');
+      const content = activePlayer.parentElement;
+      const bounds = item.getBoundingClientRect();
+      const dockTop = bounds.top < 0;
+      const dockBottom = !dockTop && bounds.bottom > window.innerHeight;
+      item.style.height = `${content.getBoundingClientRect().height}px`;
+      item.classList.toggle('is-docked-top', dockTop);
+      item.classList.toggle('is-docked-bottom', dockBottom);
+      item.style.height = dockTop || dockBottom ? `${content.getBoundingClientRect().height}px` : '';
+    };
+    const playerObserver = new IntersectionObserver(updateDockedPlayer, { threshold: [0, 1] });
+    window.addEventListener('resize', updateDockedPlayer);
     const getMp3Url = (filename) => config.mp3BasePath
       ? `${config.mp3BasePath.replace(/\/+$/, '')}/${filename}`
       : filename;
@@ -625,6 +666,9 @@
       const mp3Url = getMp3Url(track.mp3);
       const item = document.createElement('li');
       item.className = 'track';
+      const content = document.createElement('div');
+      content.className = 'track-content';
+      item.appendChild(content);
 
       const title = document.createElement('h2');
       title.className = 'track-title';
@@ -638,7 +682,7 @@
       name.textContent = track.title;
       titleLink.appendChild(name);
       title.appendChild(titleLink);
-      item.appendChild(title);
+      content.appendChild(title);
 
       const links = document.createElement('div');
       links.className = 'track-links';
@@ -666,7 +710,7 @@
       textLabel.textContent = 'Text:';
       textRow.append(textLabel, ' ', siteLink);
       links.appendChild(textRow);
-      item.appendChild(links);
+      content.appendChild(links);
 
       const player = document.createElement('audio');
       player.controls = true;
@@ -687,12 +731,15 @@
         if (activePlayer && activePlayer !== player) {
           activePlayer.pause();
           activePlayer.currentTime = 0;
+          resetDockedTrack(activePlayer);
           activePlayer.closest('.track').classList.remove('is-active');
         }
         activePlayer = player;
         item.classList.add('is-active');
+        updateDockedPlayer();
       });
       player.addEventListener('ended', () => {
+        resetDockedTrack(player);
         if (activePlayer === player) {
           activePlayer = null;
           item.classList.remove('is-active');
@@ -706,9 +753,10 @@
         }
       });
       players.push(player);
-      item.appendChild(player);
+      content.appendChild(player);
 
       list.appendChild(item);
+      playerObserver.observe(item);
     }
   </script>
 </body>
