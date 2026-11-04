@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCSMath Audio</title>
+  <script>
+    const config = {
+      mp3BasePath: 'https://scsmath.com/KirtanGuide/KirtanGuide8thEd-GaudiyaGitanjali-SungByManasaKrishna-final-32kbps/'
+    };
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #34271f;
+      --muted: #795b47;
+      --rule: #ead9c8;
+      --link: #934b20;
+      --link-underline: #d8aa83;
+      --page: #fff9f3;
+      --active-row: #ffecd9;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 32px 24px 56px;
+      color: var(--ink);
+      background: var(--page);
+    }
+    h1 {
+      margin: 0 0 22px;
+      font-size: 1.5rem;
+    }
+    #audio-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .track {
+      padding: 17px 12px 19px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .track.is-active { background: var(--active-row); }
+    .track-title {
+      margin: 0 0 7px;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .track-links {
+      display: grid;
+      gap: 5px;
+      margin-bottom: 10px;
+      font-size: 0.875rem;
+    }
+    .track-link-row { overflow-wrap: anywhere; }
+    .track-number {
+      min-width: 2.5em;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      padding-right: 0.2em;
+    }
+    a {
+      color: var(--link);
+      text-decoration: underline;
+      text-decoration-color: var(--link-underline);
+      text-underline-offset: 3px;
+    }
+    a:hover { text-decoration-color: currentColor; }
+    audio {
+      display: block;
+      width: min(100%, 520px);
+      min-width: min(300px, 100%);
+      height: 36px;
+    }
+    audio::-webkit-media-controls-panel { background-color: #e9ceb4; }
+    @media (max-width: 480px) {
+      body { padding: 24px 16px 40px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>SCSMath Audio</h1>
+  <ol id="audio-list"></ol>
+  <script type="application/json" id="audio-tracks">
+    [
+      {
+        "title": "Acharyya charana vandana",
+        "slug": "jaya-shrila-maharaja-charanaravinda",
+        "mp3": "Acharyya-charana-vandana.mp3"
+      },
+      {
+        "title": "Acharyya vandana",
+        "slug": "jayare-jayare-jaya-paramahamsa-mahashiaya",
+        "mp3": "Acharyya-vandana.mp3"
+      },
+      {
+        "title": "Ajna Tahal",
+        "slug": "nadiya-godrume-nityananda-mahajana",
+        "mp3": "Ajna-Tahal.mp3"
+      },
+      {
+        "title": "Akrodha Paramananda",
+        "slug": "akrodha-paramananda",
+        "mp3": "Akrodha_Paramananda.mp3"
+      },
+      {
+        "title": "Amara Jivana",
+        "slug": "amara-jivana-sada-pape-rata",
+        "mp3": "Amara_Jivana.mp3"
+      },
+      {
+        "title": "Arunodoya kirttan",
+        "slug": "udilo-aruna-puraba-bhage",
+        "mp3": "Arunodoya-kirttan.mp3"
+      },
+      {
+        "title": "Atma Nivedana",
+        "slug": "atma-nivedana-tuya-pade-kori",
+        "mp3": "Atma_Nivedana.mp3"
+      },
+      {
+        "title": "Atma Samarpane",
+        "slug": "atma-samarpane-gela-abhimana",
+        "mp3": "Atma_Samarpane.mp3"
+      },
+      {
+        "title": "Avatara Sara",
+        "slug": "avatara-sara-gora-avatara",
+        "mp3": "Avatara_Sara.mp3"
+      },
+      {
+        "title": "Bhajahu Re Mana",
+        "slug": "bhajahu-re-mana-shri-nanda-nandana",
+        "mp3": "Bhajahu_Re_Mana.mp3"
+      },
+      {
+        "title": "Bhajan giti",
+        "slug": "bhaja-re-bhaja-re-amar-mana-ati-manda",
+        "mp3": "Bhajan-giti.mp3"
+      },
+      {
+        "title": "Bhajan Lalasa",
+        "slug": "hari-he-prapanche-podiya-agati-hoiya",
+        "mp3": "Bhajan-Lalasa.mp3"
+      },
+      {
+        "title": "Bimala Hemajini",
+        "slug": "vimala-hemajin-tanu-anupama-re",
+        "mp3": "Bimala_Hemajini.mp3"
+      },
+      {
+        "title": "Chaudda Sata Sata Sake",
+        "slug": "chaudda-shiata-sata-shiake-masa-je-phalgun",
+        "mp3": "Chaudda_Sata_Sata_Sake.mp3"
+      },
+      {
+        "title": "Dainya O Prapatti",
+        "slug": "hari-he-dayala-mora-jaya-radha-natha",
+        "mp3": "Dainya_O_Prapatti.mp3"
+      },
+      {
+        "title": "Dainya",
+        "slug": "bhuliya-tomare-samsare-asiya",
+        "mp3": "Dainya.mp3"
+      },
+      {
+        "title": "Doyal Nitai Chaitanya bole",
+        "slug": "dayal-nitai-chaitanya-bole-nach-re",
+        "mp3": "Doyal_Nitai_Chaitanya_bole.mp3"
+      },
+      {
+        "title": "Durlabha manava janma",
+        "slug": "durlabha-manava-janma-labhiya-samsare",
+        "mp3": "Durlabha_manava-janma.mp3"
+      },
+      {
+        "title": "E ghora samsare",
+        "slug": "e-ghora-samsare-podiya-manava",
+        "mp3": "E_ghora_samsare.mp3"
+      },
+      {
+        "title": "Emona Gauranga bine nahi ara",
+        "slug": "emona-gauranga-bine-nahi-ara",
+        "mp3": "Emona_Gauranga_bine_nahi_ara.mp3"
+      },
+      {
+        "title": "Gaura Pahu",
+        "slug": "gaura-pahu-na-bhajiya-mainu",
+        "mp3": "Gaura_Pahu.mp3"
+      },
+      {
+        "title": "Gauranga bolite habe",
+        "slug": "gauranga-bolite-hobe-pulaka-shorira",
+        "mp3": "Gauranga_bolite_habe.mp3"
+      },
+      {
+        "title": "Goptrtve Varana",
+        "slug": "ki-jani-ki-bale-tomara-dhamete",
+        "mp3": "Goptrtve_Varana.mp3"
+      },
+      {
+        "title": "Gurudev",
+        "slug": "gurudeva-kripa-bindu-diya-kara-ei-dase",
+        "mp3": "Gurudev.mp3"
+      },
+      {
+        "title": "Hare Krsna Mahamantra",
+        "slug": "hare-krishna-hare-krishna-krishna-krishna-hare-hare",
+        "mp3": "Hare_Krsna_Mahamantra.mp3"
+      },
+      {
+        "title": "He deva bhavantam vande",
+        "slug": "he-deva-bhavantam-vande",
+        "mp3": "He_deva_bhavantam_vande.mp3"
+      },
+      {
+        "title": "Ista deve Vijnapti",
+        "slug": "hari-hari-biphole-janama-goyainu",
+        "mp3": "Ista-deve_Vijnapti.mp3"
+      },
+      {
+        "title": "Jadi Gora na ho'to",
+        "slug": "jadi-gaura-na-hoto-tobe-ki-hoito",
+        "mp3": "Jadi_Gora_na_ho'to.mp3"
+      },
+      {
+        "title": "Jasoda Nandana Krsna",
+        "slug": "jaya-yashoda-nandana-krishna-gopala-govinda",
+        "mp3": "Jasoda_Nandana_Krsna.mp3"
+      },
+      {
+        "title": "Jaya Guru Maharaja Koruna Sagara",
+        "slug": "jaya-guru-maharaja-karuna-sagara",
+        "mp3": "Jaya_Guru_Maharaja_Koruna_Sagara.mp3"
+      },
+      {
+        "title": "Jaya Radha Madhava",
+        "slug": "radha-madhava-kunja-bihari",
+        "mp3": "Jaya_Radha-Madhava.mp3"
+      },
+      {
+        "title": "Kali ghora timire",
+        "slug": "kali-ghora-timire-garasala-jagajana",
+        "mp3": "Kali-ghora_timire.mp3"
+      },
+      {
+        "title": "Ke Jabi",
+        "slug": "ke-jabi-ke-jabi-bhai-bhava-sindhu-para",
+        "mp3": "Ke_Jabi.mp3"
+      },
+      {
+        "title": "Ki rupe paibo seva",
+        "slug": "ki-rupe-paibo-seva-mui-durachara",
+        "mp3": "Ki-rupe_paibo_seva.mp3"
+      },
+      {
+        "title": "Kobe ho'be bolo",
+        "slug": "kobe-hobe-bolo-se-dina-amar",
+        "mp3": "Kobe_ho'be_bolo.mp3"
+      },
+      {
+        "title": "Mahatmya giti",
+        "slug": "shri-guru-charana-padma-kevala-bhakati",
+        "mp3": "Mahatmya-giti.mp3"
+      },
+      {
+        "title": "Manah Siksa",
+        "slug": "nitai-pada-kamala-koti-chandra-sushitala",
+        "mp3": "Manah-Siksa.mp3"
+      },
+      {
+        "title": "Manasa Deho Geho",
+        "slug": "manasa-deho-geho-jo-kichu-mora",
+        "mp3": "Manasa_Deho_Geho.mp3"
+      },
+      {
+        "title": "Mayura Mukuta",
+        "slug": "mayura-mukuta-pitambara-dhari",
+        "mp3": "Mayura_Mukuta.mp3"
+      },
+      {
+        "title": "Nagara bramiya amar",
+        "slug": "nagara-bhramiya-amara-gaura-elo-ghore",
+        "mp3": "Nagara_bramiya_amar.mp3"
+      },
+      {
+        "title": "Nama Sankirttan",
+        "slug": "hari-haraye-namah-krishna-yadavaya-namah",
+        "mp3": "Nama_Sankirttan.mp3"
+      },
+      {
+        "title": "Nitai gunamani amar",
+        "slug": "nitai-gunamani-amara-nitai-gunamani",
+        "mp3": "Nitai_gunamani_amar.mp3"
+      },
+      {
+        "title": "Nivedana (Pt 3)",
+        "slug": "gopinath-amara-upaya-nai",
+        "mp3": "Nivedana_(Pt_3).mp3"
+      },
+      {
+        "title": "Nivedana (Pt. 1)",
+        "slug": "gopinath-mama-nivedana-shiuno",
+        "mp3": "Nivedana_(Pt._1).mp3"
+      },
+      {
+        "title": "Nivedana (Pt. 2)",
+        "slug": "gopinath-ghuchao-samsara-jvala",
+        "mp3": "Nivedana_(Pt.2).mp3"
+      },
+      {
+        "title": "Prabhati Giti",
+        "slug": "kali-kukkura-kadana-jadi-chao-he",
+        "mp3": "Prabhati_Giti.mp3"
+      },
+      {
+        "title": "Prabhu Kohe Kohilan",
+        "slug": "prabhu-kohe-kohilan-ei-mahamantra",
+        "mp3": "Prabhu_Kohe_Kohilan.mp3"
+      },
+      {
+        "title": "Prarthana Lalasamayi",
+        "slug": "kripa-kara-vaishnava-thakura",
+        "mp3": "Prarthana_Lalasamayi.mp3"
+      },
+      {
+        "title": "Radha kundatata kunja kutira",
+        "slug": "radhakundatata-kunjakutira",
+        "mp3": "Radha-kundatata-kunja-kutira.mp3"
+      },
+      {
+        "title": "Rupa Kirttan",
+        "slug": "janama-saphala-tara-krishna-darashiana-jara",
+        "mp3": "Rupa_Kirttan.mp3"
+      },
+      {
+        "title": "Sakhi vrnde Vijnapti",
+        "slug": "radha-krishna-prana-mora-jugala-kishora",
+        "mp3": "Sakhi-vrnde_Vijnapti.mp3"
+      },
+      {
+        "title": "Savarana Sri Gaura mahima",
+        "slug": "gaurangera-duti-pada-jar-dhana-sampada",
+        "mp3": "Savarana-Sri-Gaura-mahima.mp3"
+      },
+      {
+        "title": "Siddhi lalasa",
+        "slug": "kobe-gaura-vane-suradhuni-tate",
+        "mp3": "Siddhi-lalasa.mp3"
+      },
+      {
+        "title": "Sri Bhoga Arati Giti",
+        "slug": "bhaja-bhakata-vatsala-shri-gaurahari",
+        "mp3": "Sri_Bhoga_Arati_Giti.mp3"
+      },
+      {
+        "title": "Sri Damodarastakam",
+        "slug": "namamishvaram-sachchidananda-rupam",
+        "mp3": "Sri_Damodarastakam.mp3"
+      },
+      {
+        "title": "Sri Dasavatar Stotram",
+        "slug": "pralaya-payodhi-jale-dhritavan-asi-vedam",
+        "mp3": "Sri_Dasavatar-Stotram.mp3"
+      },
+      {
+        "title": "Sri Dayita Das Pranati Panchakam",
+        "slug": "bhayabhanjana-jayashiamsana",
+        "mp3": "Sri_Dayita_Das_Pranati_Panchakam.mp3"
+      },
+      {
+        "title": "Sri Gaura Arati",
+        "slug": "jaya-jaya-gaurachander-arotiko-shobha",
+        "mp3": "Sri_Gaura_Arati.mp3"
+      },
+      {
+        "title": "Sri Govinda Kunda Gupta Govardhan Arati",
+        "slug": "jaya-jaya-girirajer-arati-vishiala",
+        "mp3": "Sri_Govinda_Kunda_Gupta_Govardhan_Arati.mp3"
+      },
+      {
+        "title": "Sri Guru Arati stuti",
+        "slug": "jaya-guru-maharaja-jati-rajeshvara",
+        "mp3": "Sri_Guru_Arati-stuti.mp3"
+      },
+      {
+        "title": "Sri Guru Arati",
+        "slug": "jaya-jaya-gurudever-arati-ujjvala",
+        "mp3": "Sri_Guru_Arati.mp3"
+      },
+      {
+        "title": "Sri Guru Parampara",
+        "slug": "krishna-hoite-chatur-mukha",
+        "mp3": "Sri_Guru_Parampara.mp3"
+      },
+      {
+        "title": "Sri Jugala arati",
+        "slug": "jaya-jaya-radha-krishna-jugala-milan",
+        "mp3": "Sri_Jugala-arati.mp3"
+      },
+      {
+        "title": "Sri Krsna Chaitanya Prabhu doya koro more",
+        "slug": "shri-krishna-chaitanya-prabhu-daya-kara-more",
+        "mp3": "Sri_Krsna_Chaitanya_Prabhu_doya_koro_more.mp3"
+      },
+      {
+        "title": "Sri Krsna Chaitanya prabhu jive doya kori",
+        "slug": "shri-krishna-chaitanya-prabhu-jive-daya-kori",
+        "mp3": "Sri_Krsna_Chaitanya_prabhu_jive_doya_kori.mp3"
+      },
+      {
+        "title": "Sri Krsnera Vimsottara Sata nama",
+        "slug": "nagare-nagare-gora-gay",
+        "mp3": "Sri_Krsnera_Vimsottara-Sata-nama.mp3"
+      },
+      {
+        "title": "Sri Nama Kirttan",
+        "slug": "jashomati-nandana-vraja-vara-nagara",
+        "mp3": "Sri_Nama-Kirttan.mp3"
+      },
+      {
+        "title": "Sri Nama",
+        "slug": "gay-gora-madhur-svare",
+        "mp3": "Sri_Nama.mp3"
+      },
+      {
+        "title": "Sri Namastakam 7",
+        "slug": "ohe-harinam-tava-mahima-apara",
+        "mp3": "Sri_Namastakam_7.mp3"
+      },
+      {
+        "title": "Sri Namastakam 8",
+        "slug": "narada-muni-bajaya-vina",
+        "mp3": "Sri_Namastakam_8.mp3"
+      },
+      {
+        "title": "Sri Nrsimha Pranam",
+        "slug": "namas-te-narasimhaya",
+        "mp3": "Sri_Nrsimha_Pranam.mp3"
+      },
+      {
+        "title": "Sri Prabhupad padma stavakah",
+        "slug": "sujanarvuda-radhita-pada-yugam",
+        "mp3": "Sri_Prabhupad_padma_stavakah.mp3"
+      },
+      {
+        "title": "Sri Prasada sevaya Giti",
+        "slug": "bhai-re-shorira-avidya-jal-jodendriya-tahe-kal",
+        "mp3": "Sri_Prasada-sevaya_Giti.mp3"
+      },
+      {
+        "title": "Sri Radhastaka, song 1",
+        "slug": "radhika-charana-padma-sakala-shreyera",
+        "mp3": "Sri_Radhastaka,_song_1..mp3"
+      },
+      {
+        "title": "Sri Radhastaka, song 2",
+        "slug": "virajar-pare-shiuddha-paravyoma-dham",
+        "mp3": "Sri_Radhastaka,_song_2..mp3"
+      },
+      {
+        "title": "Sri Radhastaka, song 8",
+        "slug": "radha-bhajane-jodi-moti-nahi-bhela",
+        "mp3": "Sri_Radhastaka,_song_8..mp3"
+      },
+      {
+        "title": "Sri Radhika stava",
+        "slug": "radhe-jaya-jaya-madhava-dayite",
+        "mp3": "Sri_Radhika-stava.mp3"
+      },
+      {
+        "title": "Sri Rupa Manjari pada",
+        "slug": "shri-rupa-manjari-pada-sei-mora-sampada",
+        "mp3": "Sri_Rupa_Manjari_pada.mp3"
+      },
+      {
+        "title": "Sri Sachinandana vandana",
+        "slug": "jaya-shiachinandana-sura-muni-vandana",
+        "mp3": "Sri_Sachinandana_vandana.mp3"
+      },
+      {
+        "title": "Sri Saraswat Arati",
+        "slug": "jayare-jayare-jaya-gaura-sarasvati",
+        "mp3": "Sri_Saraswat_Arati.mp3"
+      },
+      {
+        "title": "Sri Siksastakam, song 1",
+        "slug": "pita-varana-kali-pavana-gora",
+        "mp3": "Sri_Siksastakam,_song_1..mp3"
+      },
+      {
+        "title": "Sri Siksastakam, song 2",
+        "slug": "tuhu-daya-sagara-tarayite-prani",
+        "mp3": "Sri_Siksastakam,_song_2..mp3"
+      },
+      {
+        "title": "Sri Siksastakam, song 3",
+        "slug": "shri-krishna-kirtane-jodi-manasa-tohara",
+        "mp3": "Sri_Siksastakam,_song_3..mp3"
+      },
+      {
+        "title": "Sri Siksastakam, song 4",
+        "slug": "prabhu-tava-pada-juge-mora-nivedana",
+        "mp3": "Sri_Siksastakam,_song_4..mp3"
+      },
+      {
+        "title": "Sri Siksastakam, song 5. Anadi Karama Phole",
+        "slug": "anadi-karama-phole",
+        "mp3": "Sri_Siksastakam,_song_5.Anadi_Karama_Phole.mp3"
+      },
+      {
+        "title": "Sri Siksastakam, song 6. Aparadha phole mama",
+        "slug": "aparadha-phole-mama",
+        "mp3": "Sri_Siksastakam,_song_6.Aparadha_phole_mama.mp3"
+      },
+      {
+        "title": "Sri Siksastakam, song 7a",
+        "slug": "gaite-gaite-nama-ki-doshia-hoilo",
+        "mp3": "Sri_Siksastakam,_song_7a.mp3"
+      },
+      {
+        "title": "Sri Siksastakam, song 7b",
+        "slug": "gaite-govinda-nam-upajilo-bhava-gram",
+        "mp3": "Sri_Siksastakam,_song_7b.mp3"
+      },
+      {
+        "title": "Sri Siksastakam, song 7c",
+        "slug": "sakhi-go-kemote-dhoribo-paran",
+        "mp3": "Sri_Siksastakam,_song_7c.mp3"
+      },
+      {
+        "title": "Sri Siksastakam, song 8a",
+        "slug": "bondhu-gon-shiunoho-vachana-mora",
+        "mp3": "Sri_Siksastakam,_song_8a.mp3"
+      },
+      {
+        "title": "Sri Sri Gaura Nityananer Doya",
+        "slug": "parama-karuna-pahu-dui-jana",
+        "mp3": "Sri_Sri_Gaura-Nityananer_Doya.mp3"
+      },
+      {
+        "title": "Sri Sri Giriraj Govardhan Arati",
+        "slug": "jaya-jaya-girirajer-arotiko-shobha",
+        "mp3": "Sri_Sri_Giriraj_Govardhan_Arati.mp3"
+      },
+      {
+        "title": "Sri Sri Gurvvastaka",
+        "slug": "samsara-davanala-lidha-loka",
+        "mp3": "Sri_Sri_Gurvvastaka.mp3"
+      },
+      {
+        "title": "Sri Tulasi parikrama giti",
+        "slug": "namo-namah-tulasi-maharani",
+        "mp3": "Sri_Tulasi-parikrama-giti.mp3"
+      },
+      {
+        "title": "Sri Vaisnava mahima giti",
+        "slug": "vaishnava-thakura-dayara-sagara",
+        "mp3": "Sri_Vaisnava-mahima-giti.mp3"
+      },
+      {
+        "title": "Sriman Mahaprabhur Sata nama",
+        "slug": "nadiya-nagare-nitai-neche-neche-gay-re",
+        "mp3": "Sriman_Mahaprabhur_Sata-nama.mp3"
+      },
+      {
+        "title": "Suddha bhakata",
+        "slug": "shiuddha-bhakata-charana-renu",
+        "mp3": "Suddha-bhakata.mp3"
+      },
+      {
+        "title": "Sva Nistha",
+        "slug": "dhana-mora-nityananda-pati-mora",
+        "mp3": "Sva-Nistha.mp3"
+      },
+      {
+        "title": "Thakura Vaisnava gana",
+        "slug": "thakura-vaishnava-gana-kori-ei-nivedana",
+        "mp3": "Thakura_Vaisnava-gana.mp3"
+      },
+      {
+        "title": "Thakura Vaisnava pada",
+        "slug": "thakura-vaishnava-pada-avanira",
+        "mp3": "Thakura_Vaisnava-pada.mp3"
+      },
+      {
+        "title": "Tumi sarvesvaresvara",
+        "slug": "tumi-sarveshvareshvara-vrajendra-kumara",
+        "mp3": "Tumi_sarvesvaresvara.mp3"
+      },
+      {
+        "title": "Vaisnava Ke",
+        "slug": "dushta-mana-tumi-kisera-vaishnava",
+        "mp3": "Vaisnava_Ke_.mp3"
+      },
+      {
+        "title": "Vaisnava Vijnapti",
+        "slug": "ei-vara-karuna-kara-vaishnava-gosani",
+        "mp3": "Vaisnava_Vijnapti.mp3"
+      },
+      {
+        "title": "Vibhavari Sesa",
+        "slug": "vibhavari-shiesha-aloka-praveshia",
+        "mp3": "Vibhavari_Sesa.mp3"
+      },
+      {
+        "title": "Viraha giti",
+        "slug": "je-anilo-prema-dhana-karuna-prachura",
+        "mp3": "Viraha-giti.mp3"
+      }
+    ]
+  </script>
+  <script>
+    const tracks = JSON.parse(document.getElementById('audio-tracks').textContent);
+    const list = document.getElementById('audio-list');
+    const players = [];
+    let activePlayer = null;
+    const getMp3Url = (filename) => config.mp3BasePath
+      ? `${config.mp3BasePath.replace(/\/+$/, '')}/${filename}`
+      : filename;
+
+    for (const [index, track] of tracks.entries()) {
+      const mp3Url = getMp3Url(track.mp3);
+      const item = document.createElement('li');
+      item.className = 'track';
+
+      const title = document.createElement('h2');
+      title.className = 'track-title';
+      const number = document.createElement('span');
+      number.className = 'track-number';
+      number.textContent = `${index + 1}.`;
+      title.appendChild(number);
+      const name = document.createElement('span');
+      name.textContent = track.title;
+      title.appendChild(name);
+      item.appendChild(title);
+
+      const links = document.createElement('div');
+      links.className = 'track-links';
+
+      const mp3Link = document.createElement('a');
+      mp3Link.href = mp3Url;
+      mp3Link.download = track.mp3;
+      mp3Link.textContent = track.mp3;
+      const downloadRow = document.createElement('div');
+      downloadRow.className = 'track-link-row';
+      const downloadLabel = document.createElement('span');
+      downloadLabel.textContent = 'Download:';
+      downloadRow.append(downloadLabel, ' ', mp3Link);
+      links.appendChild(downloadRow);
+
+      const siteLink = document.createElement('a');
+      siteLink.href = `https://kirtan.site/en/${track.slug}/`;
+      siteLink.target = '_blank';
+      siteLink.rel = 'noopener noreferrer';
+      siteLink.textContent = siteLink.href;
+      siteLink.setAttribute('aria-label', `${track.title} on kirtan.site`);
+      const textRow = document.createElement('div');
+      textRow.className = 'track-link-row';
+      const textLabel = document.createElement('span');
+      textLabel.textContent = 'Text:';
+      textRow.append(textLabel, ' ', siteLink);
+      links.appendChild(textRow);
+      item.appendChild(links);
+
+      const player = document.createElement('audio');
+      player.controls = true;
+      player.preload = 'none';
+      player.src = mp3Url;
+      player.setAttribute('aria-label', `Play ${track.title}`);
+      player.addEventListener('play', () => {
+        if (activePlayer && activePlayer !== player) {
+          activePlayer.pause();
+          activePlayer.currentTime = 0;
+          activePlayer.closest('.track').classList.remove('is-active');
+        }
+        activePlayer = player;
+        item.classList.add('is-active');
+      });
+      player.addEventListener('ended', () => {
+        if (activePlayer === player) {
+          activePlayer = null;
+          item.classList.remove('is-active');
+        }
+        const nextPlayer = players[index + 1];
+        if (nextPlayer) {
+          nextPlayer.currentTime = 0;
+          nextPlayer.play().catch((error) => {
+            console.warn('Could not start the next track:', error);
+          });
+        }
+      });
+      players.push(player);
+      item.appendChild(player);
+
+      list.appendChild(item);
+    }
+  </script>
+</body>
+</html>
