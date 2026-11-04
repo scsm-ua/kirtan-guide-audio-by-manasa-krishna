@@ -628,13 +628,16 @@
 
       const title = document.createElement('h2');
       title.className = 'track-title';
+      const titleLink = document.createElement('a');
+      titleLink.href = mp3Url;
       const number = document.createElement('span');
       number.className = 'track-number';
       number.textContent = `${index + 1}.`;
       title.appendChild(number);
       const name = document.createElement('span');
       name.textContent = track.title;
-      title.appendChild(name);
+      titleLink.appendChild(name);
+      title.appendChild(titleLink);
       item.appendChild(title);
 
       const links = document.createElement('div');
@@ -670,6 +673,16 @@
       player.preload = 'none';
       player.src = mp3Url;
       player.setAttribute('aria-label', `Play ${track.title}`);
+      titleLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (player.paused) {
+          player.play().catch((error) => {
+            console.warn('Could not start the track:', error);
+          });
+        } else {
+          player.pause();
+        }
+      });
       player.addEventListener('play', () => {
         if (activePlayer && activePlayer !== player) {
           activePlayer.pause();
